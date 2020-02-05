@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField'
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core/styles';
 
-
+import ipfs from './ipfs';
 import mediacontract from './mediacontract'
 import {DropzoneArea} from 'material-ui-dropzone'
 import { FormControl } from '@material-ui/core';
@@ -24,8 +24,8 @@ import {
   useHistory,
   useLocation,
 } from 'react-router-dom'
-import ipfs from './ipfs';
 const IPFSClient = require('ipfs-http-client');
+
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -142,7 +142,7 @@ function StockSearchPage() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    ipfs.files.add(buffer,(error,result)=>{
+    ipfs.files.add(Buffer.from(buffer),(error,result)=>{
       if(error){
         console.err(error)
         return
@@ -152,6 +152,12 @@ function StockSearchPage() {
 
     });
 
+
+    return(
+      <div>
+        The hash of your file is {ipfsHash}.
+      </div>
+    )
 
     //bring in user's metamask account address
     /*const accounts = await web3.eth.getAccounts();

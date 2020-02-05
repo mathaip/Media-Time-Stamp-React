@@ -153,11 +153,6 @@ function StockSearchPage() {
     });
 
 
-    return(
-      <div>
-        The hash of your file is {ipfsHash}.
-      </div>
-    )
 
     //bring in user's metamask account address
     /*const accounts = await web3.eth.getAccounts();

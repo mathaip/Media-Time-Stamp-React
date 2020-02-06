@@ -1,0 +1,42 @@
+.App {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.App-Content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.AppHeader {
+  border-bottom: 1px solid #ccc;
+}
+
+.FoodRow {
+  padding: 20px;
+  margin: 20px 0;
+
+  display: flex;
+}
+
+.FoodRow-Image {
+  background-color: #ccc;
+  width: 120px;
+  height: 120px;
+}
+
+.FoodPage {
+  margin: 20px 0;
+}
+.FoodPage-Image {
+  background-color: #ccc;
+  height: 240px;
+}

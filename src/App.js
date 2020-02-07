@@ -1,10 +1,12 @@
 import './App.css'
-import React from 'react'
+import React, { useState } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import consulting_hash from './hooks/consulting-hash'
 import Box from '@material-ui/core/Box'
 import Web3 from 'web3';
+import fetchData from './utils/fetchData';
 import { MEDIA_ORACLE_ABI, MEDIA_ORACLE_ADDRESS } from './mediacontract';
 import TextField from '@material-ui/core/TextField'
 import Icon from '@material-ui/core/Icon';
@@ -26,6 +28,7 @@ import {
 const IPFSClient = require('ipfs-http-client');
 
 
+
 const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1),
@@ -40,6 +43,8 @@ export default function App() {
         <div className='App-Content'>
           <AppHeader />
           <AppBody/>
+          <InsertHash/>
+
         </div>
       </div>
     </BrowserRouter>
@@ -205,6 +210,22 @@ function StockSearchPage() {
           </Button>
         </form>
 
+    </div>
+  )
+}
+
+
+
+function InsertHash({value}){
+  const[value1, setValue] = useState({hash: ''})
+  return(
+    <div>
+      <form>
+        Insert your hash:
+        <TextField id="hash" value={value1.hash} onChange={event =>setValue(event.target.value)}/>
+        <Button onClick={event => setValue({ hash: event.target.value})} variant='contained' color='primary' size="medium">Search</Button>
+        <consulting_hash value={value1}/>
+      </form>
     </div>
   )
 }

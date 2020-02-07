@@ -107,8 +107,9 @@ useEffect (async() => {
       }
       console.log(result);
       let _hash = web3.utils.keccak256(result[0].hash);
-      console.log(_hash);
-      setHash(_hash);
+      let intHash = parseInt(Number(_hash), 10);
+
+      setHash(intHash);
     });
   }
   function handleDescription(e) {
@@ -178,6 +179,13 @@ useEffect (async() => {
       <form>
         <DropzoneArea onChange={captureFile} />
         <Box m={2} />
+        <Button
+          onClick={handleHash}
+          variant="contained"
+          color="primary"
+          size="medium"
+          disabled={!buffer}
+        > Confirm the File You Want to Store</Button>
       </form>
       <form>
         <label>

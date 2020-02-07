@@ -17,10 +17,9 @@ import {
 
 import { MEDIA_ORACLE_ADDRESS, MEDIA_ORACLE_ABI } from "./mediacontract";
 import ipfs from "./ipfs";
-import Web3 from "web3";
+import web3 from "./web3";
 
 const IPFSClient = require("ipfs-http-client");
-const web3 = new Web3(window.web3.currentProvider);
 const mediaContract = new web3.eth.Contract(
   MEDIA_ORACLE_ABI,
   MEDIA_ORACLE_ADDRESS
@@ -68,6 +67,33 @@ function MediaTimeStamp() {
   const [description, setDescription] = React.useState("");
   const [URL, setURL] = React.useState("");
   const [type, setType] = React.useState("");
+  const [buffer, setBuffer] = React.useState(null);
+
+
+  const captureFile = event => {
+    if (!e) var e = window.event
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault()) e.preventDefault();
+    const file = event[0]
+    console.log(file);
+    let reader = new window.FileReader()
+    reader.onloadend = () => convertToBuffer(reader)    
+    reader.readAsArrayBuffer(file)
+
+  };
+
+ const convertToBuffer = async(reader) => {
+    //file is converted to a buffer to prepare for uploading to IPFS
+      const buffer1 = await Buffer.from(reader.result);
+      console.log(buffer1)
+    //set this buffer -using es6 syntax
+      setBuffer(buffer1);
+
+  };
+  console.log(convertToBuffer)
+  console.log(buffer)
+
 
   useEffect(() => {
     async function fetchData() {
@@ -76,18 +102,29 @@ function MediaTimeStamp() {
     setowner(fetchData());
   }, []);
 
+
   async function create(_hash, _description, _URL, _type) {
     const accounts = await web3.eth.getAccounts();
     await mediaContract.methods
       .createOwnership(hash, description, URL, type)
-      .send({ from: accounts[0] })
+      .send({ from: accounts[0],
+      gas:210000 })
       .then(res => setMedia(res.transactionHash));
   }
 
   function handleHash(e) {
     e.preventDefault();
-    setHash(e.target.value);
-  }
+    ipfs.files.add(Buffer.from(buffer),(error,result)=>{
+      if(error){
+        console.err(error)
+        return
+      }
+      console.log(result)
+      let _hash = web3.utils.keccak256(result[0].hash);
+      console.log(_hash);
+      setHash(_hash)
+  })
+}
   function handleDescription(e) {
     e.preventDefault();
     setDescription(e.target.value);
@@ -114,10 +151,9 @@ function MediaTimeStamp() {
       <Box m={1} />
 
       <form>
-        <label>
-          Hash:
-          <input type="text" name="hash" onChange={handleHash} />
-        </label>
+      <DropzoneArea 
+              onChange={captureFile}
+              />
         <Box m={2} />
 
         <label>
@@ -134,11 +170,11 @@ function MediaTimeStamp() {
           text:
           <input type="text" name="type" onChange={handleType} />
         </label>
-        <input type="submit" value="Submit" onClick={clickCreate} />
+        
         <Box m={2} />
 
         <Button
-          // onClick={onClick}
+          onClick={handleHash}
           variant="contained"
           color="primary"
           size="medium"

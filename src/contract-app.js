@@ -66,7 +66,11 @@ const useStyles = makeStyles(theme => ({
 
 function AppHeader() {
   const classes = useStyles();
+  const history = useHistory();
 
+  const onclickVerify = ()=>{
+    history.push('/verify')
+  }
   return (
     <div className="AppHeader">
       <AppBar position="sticky">
@@ -75,6 +79,12 @@ function AppHeader() {
           <Typography variant="h6" className={classes.title} align='center'>
             Media Ownership Dapp
           </Typography>
+          <Typography color="secondary">
+          <Button onClick={onclickVerify}>
+          Verify Your Content
+          </Button>
+          </Typography>
+          
         </Toolbar>
       </AppBar>
     </div>
@@ -85,11 +95,13 @@ function AppBody() {
   return (
     <Switch>
       <Route exact={true} path="/" render={() => <MediaTimeStamp />} />
-      <Route exact={true} path="verify" render={()=> <Hashes/> }/>
+      <Route exact={true} render={()=> <InsertHash
+
+      /> }/>
     </Switch>
   );
 }
-function MediaTimeStamp(props) {
+function MediaTimeStamp() {
   const history = useHistory();
 
   const [owner, setowner] = React.useState("");
@@ -222,6 +234,7 @@ useEffect (async() => {
           variant="contained"
           color="primary"
           size="medium"
+          disabled={!buffer}
         > Confirm the File You Want to Store</Button>
   
       <Box m={2} />
@@ -269,8 +282,8 @@ useEffect (async() => {
         <Box m={2} />
 
 
-        <form>
         <Button
+          
           onClick={requestOwnership}
           variant="contained"
           color="primary"
@@ -281,7 +294,6 @@ useEffect (async() => {
         </Button> 
         <Box component='span' m={1}/>
         {!hash? null : <TextField id="reasons" label="Reasons" onChange={e => setReasons(e.target.value)}/>} 
-        </form>
 
 
         <Box m={2} /> 
@@ -336,10 +348,22 @@ useEffect (async() => {
 
     </div>
   );
-
+  
   
   }
-  
+  function InsertHash(){
+    const[value1, setValue] = React.useState({hash: ''})
+    return(
+      <div>
+        <form>
+          Insert your hash:
+          <TextField id="hash" value={value1.hash} onChange={event =>setValue(event.target.value)}/>
+          <Button onClick={event => setValue({ hash: event.target.value})} variant='contained' color='primary' size="medium">Search</Button>
+          <Hashes value={value1}/>
+        </form>
+      </div>
+    )
+  }
     
 
 

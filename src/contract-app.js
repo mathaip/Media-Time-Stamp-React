@@ -1,12 +1,23 @@
 import "./App.css";
 import React, { useEffect } from "react";
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField"
 import { DropzoneArea } from "material-ui-dropzone";
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import { Container } from '@material-ui/core';
+import Hashes from './hooks/consulting-hash.js'
+
 import {
   BrowserRouter,
   Switch,
@@ -30,21 +41,42 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="App">
+       
+        <AppHeader />
+
+
         <div className="App-Content">
-          <AppHeader />
-          <AppBody />
+          <AppBody backgroundColor='blue' />
         </div>
-      </div>
+        </div>
     </BrowserRouter>
   );
 }
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 2,
+  },
+  menuButton: {
+    marginRight: theme.spacing(9),
+  },
+  title: {
+    flexGrow: 12,
+  },
+}));
 
 function AppHeader() {
+  const classes = useStyles();
+
   return (
     <div className="AppHeader">
-      <Grid container={true} justify="space-between" alignItems="center">
-        <Typography component="h1">Media Ownership Dapp</Typography>
-      </Grid>
+      <AppBar position="sticky">
+        <Toolbar>
+          
+          <Typography variant="h6" className={classes.title} align='center'>
+            Media Ownership Dapp
+          </Typography>
+        </Toolbar>
+      </AppBar>
     </div>
   );
 }
@@ -53,10 +85,11 @@ function AppBody() {
   return (
     <Switch>
       <Route exact={true} path="/" render={() => <MediaTimeStamp />} />
+      <Route exact={true} path="verify" render={()=> <Hashes/> }/>
     </Switch>
   );
 }
-function MediaTimeStamp() {
+function MediaTimeStamp(props) {
   const history = useHistory();
 
   const [owner, setowner] = React.useState("");
@@ -69,8 +102,7 @@ function MediaTimeStamp() {
   const [buffer, setBuffer] = React.useState(null);
   const [myMedias, setMyMedias] = React.useState([]);
   const [reasons, setReasons] = React.useState("");
-
-
+  
   const captureFile = event => {
     if (!e) var e = window.event;
     e.cancelBubble = true;
@@ -93,7 +125,7 @@ function MediaTimeStamp() {
 
 useEffect (async() => {
     const accounts =  await new web3.eth.getAccounts(); 
-    const contractOwner = await mediaContract.methods.contractOwner().call({from: accounts[0]});
+    const contractOwner = await mediaContract.methods.contractOwner().call({from: accounts[0],gas:210000});
     setowner(contractOwner);
   },[]
 )
@@ -130,7 +162,7 @@ useEffect (async() => {
     const accounts =  await new web3.eth.getAccounts(); 
     await mediaContract.methods
       .createOwnership(hash, description, URL, type)
-      .send({from: accounts[0]})
+      .send({from: accounts[0], gas:210000})
       .then(res => setMedia(res.transactionHash));
   }
   const myMediasCall = async () => {  
@@ -164,10 +196,16 @@ useEffect (async() => {
     const accounts =  await new web3.eth.getAccounts();
     await mediaContract.methods.transferOwnership(hash).send({from: accounts[0], gas: 5000000}).then(res => alert(res))
   }
+  
+
+
+  
+  
 ////////////////////////////////////
 
   return (
     <div>
+    <Container fixed>
       <Box m={2} />
       <Typography variant="h5">Hash your media</Typography>
       <Box m={1} />
@@ -184,24 +222,39 @@ useEffect (async() => {
           variant="contained"
           color="primary"
           size="medium"
-          disabled={!buffer}
         > Confirm the File You Want to Store</Button>
-      </form>
-      <form>
-        <label>
-          description:
-          <input type="text" name="description" onChange={handleDescription} />
-        </label>
+  
+      <Box m={2} />
+        <TextField
+        type="text" 
+        name="description" 
+        onChange={handleDescription} 
+        label="description"
+        variant="outlined"
+          >
+            Description
+        </TextField>
+        
         <Box m={2} />
-        <label>
-          URL:
-          <input type="url" name="url" onChange={handleURL} />
-        </label>
+        <TextField
+        type="text" 
+        name="url" 
+        onClick={handleURL} 
+        label="URL"
+        variant="outlined"
+          >
+            Description
+        </TextField>
         <Box m={2} />
-        <label>
-          type:
-          <input type="text" name="type" value={type} onChange={handleType} />
-        </label>
+        <TextField
+        type="text" 
+        name="type" 
+        onChange={handleType} 
+        label="Type of Media"
+        variant="outlined"
+          >
+            Description
+        </TextField>
         <Box m={2} />
 
         <Button
@@ -227,7 +280,7 @@ useEffect (async() => {
           Request Ownership
         </Button> 
         <Box component='span' m={1}/>
-        {hash === ""? null : <TextField id="reasons" label="Reasons" onChange={e => setReasons(e.target.value)}/>} 
+        {!hash? null : <TextField id="reasons" label="Reasons" onChange={e => setReasons(e.target.value)}/>} 
         </form>
 
 
@@ -275,11 +328,18 @@ useEffect (async() => {
         >
           My Medias
         </Button>
+      
         <div>{myMedias.map(res => <li> {res} </li>)}</div>
+      
       </form>
+      </Container>
 
     </div>
   );
 
+  
+  }
+  
+    
 
-}
+

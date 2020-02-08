@@ -17,12 +17,6 @@ const Hashes = (value) => {
     fetchData();
   });
 
-  return (
-    <div>
-      <span>{JSON.stringify(value)}</span>
-      <hr />
-      <span>Has error: {JSON.stringify(hasError)}</span>
-    </div>
-  );
+  return {hasError,value}
 };
 export default Hashes;

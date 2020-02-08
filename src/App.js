@@ -12,7 +12,7 @@ import { MEDIA_ORACLE_ABI, MEDIA_ORACLE_ADDRESS } from './mediacontract';
 import TextField from '@material-ui/core/TextField'
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core/styles';
-
+import axios from 'axios';
 import ipfs from './ipfs';
 import mediacontract from './mediacontract'
 import {DropzoneArea} from 'material-ui-dropzone'
@@ -45,7 +45,7 @@ export default function App() {
           <AppHeader />
           <AppBody/>
           <InsertHash/>
-
+          <DisplayHash/>
         </div>
       </div>
     </BrowserRouter>
@@ -217,17 +217,37 @@ function StockSearchPage() {
 
 
 
-function InsertHash({value}){
-  const[value1, setValue] = useState({hash: ''})
+function InsertHash(){
+  const[value1, setValue] = useState('')
+  const[hash, setHash] = useState('')
+  
+
   return(
     <div>
       <form>
         Insert your hash:
-        <TextField id="hash" value={value1.hash} onChange={event =>setValue(event.target.value)}/>
-        <Button onClick={event => setValue({ hash: event.target.value})} variant='contained' color='primary' size="medium">Search</Button>
-        <consulting_hash value={value1}/>
+        <TextField id="hash" value={value1} onChange={event =>setValue(event.target.value)}/>
+        <Button id="hash" onClick={event => setHash(DisplayHash(value1))} variant='contained' color='primary' size="medium">Search</Button>
+        
       </form>
     </div>
   )
+}
+
+function DisplayHash(props){
+  const hash = props.value1
+  const[value, setValue] = useState([])
+  React.useEffect(() => {
+    axios.get(`https://ipfs.infura.io:5001/api/v0/dag/get?arg=${hash}`)
+    .then(res =>{
+      console.log(res)
+      setValue(res.value)
+    })
+    .catch(err =>{
+      console.log(err)
+    })
+  },[setValue, hash])
+  
+  if(value) return <div><span>{JSON.stringify(value)}</span></div>
 }
 

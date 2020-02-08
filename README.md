@@ -12,4 +12,5 @@
 5. get the deployed address and put it in mediacontract.js
 
 4. Npm Start 
-![GitHub Logo](./public/project-plan.png)
+(![alt text](https://raw.githubusercontent.com/mathaip/Media-Time-Stamp-React/master/public/project-plan.png)
+

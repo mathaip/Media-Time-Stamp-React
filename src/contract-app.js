@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField"
+import TextField from "@material-ui/core/TextField";
 import { DropzoneArea } from "material-ui-dropzone";
 import {
   BrowserRouter,
@@ -21,10 +21,10 @@ import { MEDIA_ORACLE_ADDRESS, MEDIA_ORACLE_ABI } from "./mediacontract";
 import ipfs from "./ipfs";
 import web3 from "./web3";
 
-  const mediaContract = new web3.eth.Contract(
-    MEDIA_ORACLE_ABI,
-    MEDIA_ORACLE_ADDRESS
-  );
+const mediaContract = new web3.eth.Contract(
+  MEDIA_ORACLE_ABI,
+  MEDIA_ORACLE_ADDRESS
+);
 
 export default function App() {
   return (
@@ -70,7 +70,6 @@ function MediaTimeStamp() {
   const [myMedias, setMyMedias] = React.useState([]);
   const [reasons, setReasons] = React.useState("");
 
-
   const captureFile = event => {
     if (!e) var e = window.event;
     e.cancelBubble = true;
@@ -91,25 +90,33 @@ function MediaTimeStamp() {
     await setBuffer(buffer1);
   }
 
-useEffect (async() => {
-    const accounts =  await new web3.eth.getAccounts(); 
-    const contractOwner = await mediaContract.methods.contractOwner().call({from: accounts[0]});
+  useEffect(async () => {
+    const accounts = await new web3.eth.getAccounts();
+    const contractOwner = await mediaContract.methods
+      .contractOwner()
+      .call({ from: accounts[0] });
     setowner(contractOwner);
-  },[]
-)
+  }, []);
 
   function handleHash(e) {
     e.preventDefault();
+    // ipfs.files.add(
+    //   { "only-hash": true },
+    //   Buffer.from(buffer),
+    //   (error, result) => {
+    //     if (error) {
+    //       console.err(error);
+    //       return;
+    //     }
+
     ipfs.files.add(Buffer.from(buffer), (error, result) => {
       if (error) {
         console.err(error);
         return;
       }
-      console.log(result);
-      let _hash = web3.utils.keccak256(result[0].hash);
-      let intHash = parseInt(Number(_hash), 10);
-
-      setHash(intHash);
+      console.log(result[0].hash); /// ex. result >>> Qme3e5ocD1SiUE8JDWJs3Esvo7Mf38wFXYabDbGkbsiexh
+      let _hash = web3.utils.keccak256(result[0].hash); /// ex. result >>> 0x0149a4df5747315c7a365dfdcf4366369b040ae6d95f652b62c90e9155dc768d
+      setHash(_hash);
     });
   }
   function handleDescription(e) {
@@ -125,46 +132,59 @@ useEffect (async() => {
     setType(e.target.value);
   }
   ///////////CONTRACT FUNCTIONS/////////////
-  const createOwnership = async (event) => {
+  const createOwnership = async event => {
     event.preventDefault();
-    const accounts =  await new web3.eth.getAccounts(); 
+    const accounts = await new web3.eth.getAccounts();
     await mediaContract.methods
       .createOwnership(hash, description, URL, type)
-      .send({from: accounts[0]})
+      .send({ from: accounts[0] })
       .then(res => setMedia(res.transactionHash));
-  }
-  const myMediasCall = async () => {  
-    const accounts =  await new web3.eth.getAccounts(); 
+  };
+  const myMediasCall = async () => {
+    const accounts = await new web3.eth.getAccounts();
     await mediaContract.methods
       .myMedias()
-      .call({from: accounts[0]})
+      .call({ from: accounts[0] })
       .then(res => setMyMedias(res));
-  }
-  
-  const requestOwnership = async (event) => {
+  };
+
+  const requestOwnership = async event => {
     event.preventDefault();
-    const accounts =  await new web3.eth.getAccounts(); 
-    await mediaContract.methods.requestOwnership(hash, reasons).send({from: accounts[0]})
-  }
-    const checkRequests = async (event) => {
+    const accounts = await new web3.eth.getAccounts();
+    await mediaContract.methods
+      .requestOwnership(hash, reasons)
+      .send({ from: accounts[0] });
+  };
+  const checkRequests = async event => {
     event.preventDefault();
-    const accounts =  await new web3.eth.getAccounts(); 
-    const requests = await mediaContract.methods.transferRequest(hash).call({from: accounts[0]})
-    console.log(requests)
-    if (requests["hasRequest"] === true) {window.alert(`from: ${requests["currentOwner"]} >>> to: ${requests["destinataryOwnership"]}`)
-}
-  }
-  const ownerApproval = async (event) => {
+    const accounts = await new web3.eth.getAccounts();
+    const requests = await mediaContract.methods
+      .transferRequest(hash)
+      .call({ from: accounts[0] });
+    console.log(requests);
+    if (requests["hasRequest"] === true) {
+      window.alert(
+        `from: ${requests["currentOwner"]} >>> to: ${requests["destinataryOwnership"]}`
+      );
+    }
+  };
+  const ownerApproval = async event => {
     event.preventDefault();
-    const accounts =  await new web3.eth.getAccounts();
-    await mediaContract.methods.ownerApproval(hash).send({from: accounts[0]}).then(res => alert(res))
-  }
-  const transferOwnership = async (event) => {
+    const accounts = await new web3.eth.getAccounts();
+    await mediaContract.methods
+      .ownerApproval(hash)
+      .send({ from: accounts[0] })
+      .then(res => alert(res));
+  };
+  const transferOwnership = async event => {
     event.preventDefault();
-    const accounts =  await new web3.eth.getAccounts();
-    await mediaContract.methods.transferOwnership(hash).send({from: accounts[0], gas: 5000000}).then(res => alert(res))
-  }
-////////////////////////////////////
+    const accounts = await new web3.eth.getAccounts();
+    await mediaContract.methods
+      .transferOwnership(hash)
+      .send({ from: accounts[0], gas: 5000000 })
+      .then(res => alert(res));
+  };
+  ////////////////////////////////////
 
   return (
     <div>
@@ -173,7 +193,7 @@ useEffect (async() => {
       <Box m={1} />
       <div>
         <Typography variant="h6">Contract owner: {owner} </Typography>
-      </div>      
+      </div>
       <Box m={1} />
 
       <form>
@@ -185,7 +205,10 @@ useEffect (async() => {
           color="primary"
           size="medium"
           disabled={!buffer}
-        > Confirm the File You Want to Store</Button>
+        >
+          {" "}
+          Confirm the File You Want to Store
+        </Button>
       </form>
       <form>
         <label>
@@ -215,23 +238,27 @@ useEffect (async() => {
         </Button>
         <Box m={2} />
 
-
         <form>
-        <Button
-          onClick={requestOwnership}
-          variant="contained"
-          color="primary"
-          size="medium"
-          disabled={hash === ""}
-        >
-          Request Ownership
-        </Button> 
-        <Box component='span' m={1}/>
-        {hash === ""? null : <TextField id="reasons" label="Reasons" onChange={e => setReasons(e.target.value)}/>} 
+          <Button
+            onClick={requestOwnership}
+            variant="contained"
+            color="primary"
+            size="medium"
+            disabled={hash === ""}
+          >
+            Request Ownership
+          </Button>
+          <Box component="span" m={1} />
+          {hash === "" ? null : (
+            <TextField
+              id="reasons"
+              label="Reasons"
+              onChange={e => setReasons(e.target.value)}
+            />
+          )}
         </form>
 
-
-        <Box m={2} /> 
+        <Box m={2} />
         <Button
           onClick={ownerApproval}
           variant="contained"
@@ -241,7 +268,7 @@ useEffect (async() => {
         >
           Transfer Apporval
         </Button>
-        <Box   m={1}/>
+        <Box m={1} />
 
         <Button
           onClick={checkRequests}
@@ -251,10 +278,10 @@ useEffect (async() => {
           disabled={hash === ""}
         >
           Check Requests
-        </Button> 
-                <Box m={2} /> 
+        </Button>
+        <Box m={2} />
 
-        <Box m={2} /> 
+        <Box m={2} />
         <Button
           onClick={transferOwnership}
           variant="contained"
@@ -264,22 +291,22 @@ useEffect (async() => {
         >
           Transfer Owner
         </Button>
-        
-        <Box m={2} /> 
+
+        <Box m={2} />
         <Button
           onClick={myMediasCall}
           variant="contained"
           color="primary"
           size="medium"
-
         >
           My Medias
         </Button>
-        <div>{myMedias.map(res => <li> {res} </li>)}</div>
+        <div>
+          {myMedias.map(res => (
+            <li> {res} </li>
+          ))}
+        </div>
       </form>
-
     </div>
   );
-
-
 }

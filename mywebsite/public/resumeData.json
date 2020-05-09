@@ -1,0 +1,133 @@
+{
+    "main": {
+        "name": "Mathai Puthiakunnel",
+        "occupation": "Blockchain Developer",
+        "description": "Currently studying Blockchain Development at George Brown College, with a keen interest in understanding how Blockchain can disrupt a multitude of industries.  ",
+        "image": "profilepic.png",
+        "bio": "I'm a new Blockchain Developer having spent the last two years learning software development after a degree in Political Science. I have a wide range of interests outside of coding but you'd have to ask me to find out",
+        "contactmessage": "Here is where you should write your message to readers to have them get in contact with you.",
+        "email": "mputhiakunnel@gmail.com",
+        "phone": "416-854-4450",
+        "address": {
+            "street": "44 Walmer Road",
+            "city": "Toronto",
+            "state": "Ontario",
+            "zip": "M5R 2X5"
+        },
+        "resumedownload": "https://drive.google.com/file/d/1akrw1IkrB6ylDWTAm7ZsYTWfbb35pe7L/view?usp=sharing",
+        "social": [{
+                "name": "linkedin",
+                "url": "https://www.linkedin.com/in/mathaiputhiakunnel/",
+                "className": "fa fa-linkedin"
+            },
+            {
+                "name": "github",
+                "url": "http://github.com/mathaip",
+                "className": "fa fa-github"
+            }
+        ]
+    },
+    "resume": {
+        "skillmessage": "Here you can create a short write-up of your skills to show off to employers",
+        "education": [{
+                "school": "George Brown College",
+                "degree": "Blockchain Development Diploma",
+                "graduated": "April 2020",
+                "description": "Developed Web Applications in Node.js and worked with tools such as Firebase, Expressjs, MongoDB and React. Gained an understanding of laws and regulations in relation to the Blockchain industry, specifically Business, Intellectual Property and Anti-Money Laundering Law. Created, deploy and tested Ethereum Smart Contracts using Solidity and Truffle. Built a Decentralized Application on the Ethereum Blockchain with React that allows users to claim ownership of their content by putting a timestamped hash on their content on the Blockchain. Worked on building a Land Registry Blockchain on Hyperledger Fabric using a ReactJS frontend and middleware in NodeJS. Built REST API’s to communicate between the web application and Hyperledger network. Designed and Built RentX, an Ethereum Rental Marketplace for my final project using React."
+            },
+            {
+                "school": "Byte Academy",
+                "degree": "Full Stack Python BootCamp",
+                "graduated": "September 2018",
+                "description": "Learned the fundamentals of computer science and object-oriented programming in Python. Developed backend applications in Python while working with REST API’s. Built a backend stock portfolio program using a stock market API. Created Full Stack Web applications in Python microframeworks: Django and Flask"
+            },
+            {
+                "school": "University of Toronto",
+                "degree": " Bachelors of Arts Political Science ",
+                "graduated": "June 2018",
+                "description": "Focused my coursework on international development and topics related to South Asia and East Asian Development.Through extensive research and practice developed excellent writing and verbal communication skills. Took interest in developing economies and the factors that help foster a nation’ s economic and social development."
+            }
+        ],
+
+        "skills": [{
+                "name": "Git",
+                "level": "70%"
+            },
+            {
+                "name": "Python",
+                "level": "85%"
+            },
+            {
+                "name": "JavaScript",
+                "level": "90%"
+            },
+            {
+                "name": "CSS",
+                "level": "90%"
+            },
+            {
+                "name": "HTML5",
+                "level": "90%"
+            },
+            {
+                "name": "React",
+                "level": "85%"
+            },
+            {
+                "name": "MongoDB",
+                "level": "70%"
+            },
+            {
+                "name": "Firebase",
+                "level": "84%"
+            },
+            {
+                "name": "Solidity",
+                "level": "88%"
+            },
+            {
+                "name": "Node.Js",
+                "level": "85%"
+            }, {
+                "name": "Hyperledger Fabric",
+                "level": "80%"
+            }
+
+        ]
+    },
+    "portfolio": {
+        "projects": [{
+                "title": "React Voting App with Ethereum Intergration",
+                "category": "Final Project of Full Stack Development in React",
+                "image": "react-voting.png",
+                "url": "https://github.com/mathaip/Fullstack4-final"
+            },
+            {
+                "title": "InfoCounch: Country Api Express.js application ",
+                "category": "Built using Express.js and MongoDb,  Infocounch uses an API to search for information based on search input",
+                "image": "infocounch.png",
+                "url": "https://github.com/mathaip/FullStack2-Final-Project"
+            },
+            {
+                "title": "Checkoutform-React",
+                "category": "Built as a project in my Fullstack development Course",
+                "image": "checkout.png",
+                "url": "https://github.com/mathaip/FS3-Final-project"
+            },
+            {
+                "title": "React Youtube-API Video Player",
+                "category": "A Video Player built in React using the Youtube Api to retrive results based on search input",
+                "image": "youtube-api.png",
+                "url": ""
+            },
+            {
+                "title": "Rentx",
+                "category": "An Ethereuem Rental Marketplace and Escrow Platform",
+                "image": "Picture1.png",
+                "url": "https://github.com/mathaip/RentX"
+            }
+
+
+        ]
+    }
+}
